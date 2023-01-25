@@ -19,11 +19,13 @@ int current_connections = 0;
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void prepare_message_clients_list(char* buffer) {
+void prepare_message_clients_list(char* buffer, char* name) {
     strcat(buffer, "[Server] List:\n");
     for (int i = 0; i < MAX_ALIVE_CONNECTIONS; i++) {
-        strcat(buffer, "\n");
-        strcat(buffer, Clients[i].name);
+        if (strcmp(Clients[i].name, name) != 0) {
+            strcat(buffer, "\n");
+            strcat(buffer, Clients[i].name);
+        }
     }
 }
 
@@ -63,7 +65,7 @@ void* handler(void* client) {
         if (read(args->sockID, receivemsg_buff, sizeof(receivemsg_buff)-1) > 0) {
             memset(&sendmsg_buff, '\0', sizeof(sendmsg_buff));
             if (strcmp(receivemsg_buff, "list clients") == 0) {
-                prepare_message_clients_list(sendmsg_buff);
+                prepare_message_clients_list(sendmsg_buff, args->name);
                 write(args->sockID, sendmsg_buff, strlen(sendmsg_buff)); 
             }  
             else {

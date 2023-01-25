@@ -15,6 +15,7 @@ gcc server.c -o server
 
 ### Running
 Each client can request the list of the clients connected to the server with the command ```list clients```.
+
 Each client can send a message to an other client with the command ```send <name> <message>```
 
 If we send something else to the server or If we try to send something to ourself, it will act as an echo server. 
